@@ -1,7 +1,6 @@
 import io
 import os.path
 from typing import List, Tuple, Type
-from unittest.mock import AsyncMock
 
 import pytest
 from fastapi import UploadFile
@@ -755,7 +754,7 @@ async def test_process_events(gen_state, mocker):
         "ip": "127.0.0.1",
     }
     app = App(state=gen_state)
-    mocker.patch.object(app, "postprocess", AsyncMock())
+    mocker.patch.object(app, "postprocess")
     event = Event(
         token="token", name="gen_state.go", payload={"c": 5}, router_data=router_data
     )
