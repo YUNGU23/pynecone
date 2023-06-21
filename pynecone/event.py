@@ -254,6 +254,24 @@ def set_cookie(key: str, value: str) -> EventSpec:
     )
 
 
+def remove_cookie(key: str, options: Dict = {}) -> EventSpec:  # noqa: B006
+    """Remove a cookie on the frontend.
+
+    Args:
+        key (str): The key identifying the cookie to be removed.
+        options (Dict): Support all the cookie options from RFC 6265
+
+    Returns:
+        EventSpec: An event to remove a cookie.
+    """
+    return server_side(
+        "_remove_cookie",
+        get_fn_signature(remove_cookie),
+        key=key,
+        options=options,
+    )
+
+
 def set_local_storage(key: str, value: str) -> EventSpec:
     """Set a value in the local storage on the frontend.
 

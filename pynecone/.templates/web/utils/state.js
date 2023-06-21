@@ -99,7 +99,11 @@ export const applyEvent = async (event, router, socket) => {
   if (event.name == "_set_cookie") {
     const cookies = new Cookies();
     cookies.set(event.payload.key, event.payload.value);
-    localStorage.setItem(event.payload.key, event.payload.value);
+    return false;
+  }
+
+  if (event.name == "_remove_cookie") {
+    cookies.remove(event.payload.key, event.payload.options)
     return false;
   }
 
