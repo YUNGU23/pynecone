@@ -17,6 +17,9 @@ let token;
 // Key for the token in the session storage.
 const TOKEN_KEY = "token";
 
+// create cookie instance
+const cookies = new Cookies();
+
 // Dictionary holding component references.
 export const refs = {};
 
@@ -97,7 +100,6 @@ export const applyEvent = async (event, router, socket) => {
   }
 
   if (event.name == "_set_cookie") {
-    const cookies = new Cookies();
     cookies.set(event.payload.key, event.payload.value);
     return false;
   }
