@@ -6,6 +6,7 @@ import copy
 import functools
 import inspect
 import traceback
+import urllib.parse
 from abc import ABC
 from collections import defaultdict
 from typing import (
@@ -496,15 +497,21 @@ class State(Base, ABC, extra=pydantic.Extra.allow):
         Returns:
                 The dict of cookies.
         """
-        headers = self.get_headers().get(constants.RouteVar.COOKIE)
-        return (
-            {
-                pair[0].strip(): pair[1].strip()
-                for pair in (item.split("=") for item in headers.split(";"))
-            }
-            if headers
-            else {}
-        )
+        cookie_dict = {}
+        cookies = self.get_headers().get(constants.RouteVar.COOKIE, "").split(";")
+
+        cookie_pairs = [cookie.split("=") for cookie in cookies if cookie]
+
+        # parse all dict and list values
+        for pair in cookie_pairs:
+            key, value = pair[0].strip(), urllib.parse.unquote(pair[1].strip())
+            try:
+                value = eval(value)
+            except Exception:
+                pass
+            finally:
+                cookie_dict[key] = value
+        return cookie_dict
 
     @classmethod
     def setup_dynamic_args(cls, args: dict[str, str]):
